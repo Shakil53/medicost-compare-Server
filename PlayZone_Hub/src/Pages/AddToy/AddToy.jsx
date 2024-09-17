@@ -36,7 +36,7 @@ const AddToy = () => {
     }
     console.log(order);
 
-    fetch('https://toys-center-server.vercel.app/toyinfo', {
+    fetch('https://play-zone-hub-server.vercel.app/toyinfo', {
       method: "POST",
       headers: {
         'content-type': 'application/json'

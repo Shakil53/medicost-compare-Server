@@ -20,7 +20,7 @@ const UpdateToys = () => {
     const description = form.description.value;
     const updateInfo = { price, quantity, description };
 
-    fetch(`https://toys-center-server.vercel.app/toyinfo/${toysData.id}`, {
+    fetch(`https://play-zone-hub-server.vercel.app/toyinfo/${toysData.id}`, {
       method: "PUT",
       headers: {
         'content-type': 'application/json'

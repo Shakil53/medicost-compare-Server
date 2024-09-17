@@ -2,20 +2,21 @@ import { createBrowserRouter } from "react-router-dom";
 import Main from "../Layout/Main";
 import About from "../Pages/About/About";
 import AddToy from "../Pages/AddToy/AddToy";
-import AllToys from "../Pages/All Toys/AllToys";
 import Reviews from "../Pages/CustomesRe/Reviews";
 import ConnectUs from "../Pages/GiveMessage/ConnectUs";
 import Home from "../Pages/Home/Home/Home";
 import LogIn from "../Pages/Login/LogIn";
-
 import Blogs from "../Pages/Blogs/Blogs";
 import Error from "../Pages/ErrorPage/Error";
-import MyToys from "../Pages/MyToys/MyToys";
 import PhGallery from "../Pages/PhGallery/PhGallery";
 import SignUp from "../Pages/Register/SignUp";
 import ToyDetails from "../Pages/ToyDetails/ToyDetails";
 import UpdateToys from "../Pages/UpdateToys/UpdateToys";
 import PrivateRoutes from "./PrivateRoutes";
+import MyToys from "../Pages/MyToys/MyToys";
+
+
+
 
 
 const router = createBrowserRouter([
@@ -51,12 +52,12 @@ const router = createBrowserRouter([
       },
       {
         path: '/alltoys',
-        element: <AllToys></AllToys>
+        // element: <AllToys></AllToys>
       },
       {
         path: "/toydetails/:id",
         element: <PrivateRoutes><ToyDetails></ToyDetails></PrivateRoutes>,
-        loader: ({ params }) => fetch(`https://toys-center-server.vercel.app/toyinfo/${params.id}`)
+        loader: ({ params }) => fetch(`https://play-zone-hub-server.vercel.app/toyinfo/${params.id}`)
       },
       {
         path: "/mytoys",
@@ -78,11 +79,11 @@ const router = createBrowserRouter([
       {
         // path: "/updateToys/:id",
         // element: <UpdateToys></UpdateToys>,
-        // loader: ({ params }) => fetch(`https://toys-center-server.vercel.app/${params.id}`)
+        // loader: ({ params }) => fetch(`https://play-zone-hub-server.vercel.app/${params.id}`)
 
         path: "/updateToys/:id",
         element: <UpdateToys></UpdateToys>,
-        loader: ({ params }) => fetch(`https://toys-center-server.vercel.app/toyinfo/${params.id}`)
+        loader: ({ params }) => fetch(`https://play-zone-hub-server.vercel.app/toyinfo/${params.id}`)
 
       }
 

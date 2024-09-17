@@ -11,7 +11,7 @@ const MyToys = () => {
   const { user } = useContext(AuthContext);
 
   useEffect(() => {
-    fetch(`https://toys-center-server.vercel.app/toyEmail/${user.email}`)
+    fetch(`https://play-zone-hub-server.vercel.app/toyEmail/${user.email}`)
       .then(res => res.json())
       .then(data => setToysEmail(data))
 
@@ -40,7 +40,7 @@ const MyToys = () => {
       confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
       if (result.isConfirmed) {
-        fetch(`https://toys-center-server.vercel.app/toyinfo/${id}`, {
+        fetch(`https://play-zone-hub-server.vercel.app/toyinfo/${id}`, {
           method: "DELETE"
         })
           .then(res => res.json())
@@ -66,7 +66,7 @@ const MyToys = () => {
   console.log(toysEmail);
 
   const handleConfirm = (id) => {
-    fetch(`https://toys-center-server.vercel.app/toyinfo/${id}`, {
+    fetch(`https://play-zone-hub-server.vercel.app/toyinfo/${id}`, {
       method: "PATCH",
       headers: {
         "content-type": "application/json",
