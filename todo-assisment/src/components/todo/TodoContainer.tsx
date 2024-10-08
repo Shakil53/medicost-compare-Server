@@ -32,7 +32,7 @@ const TodoContainer = () => {
             <div className="bg-primary-gradient w-full rounded-xl p-[5px]">
                 <div className="bg-white p-4 w-full h-full space-y-3 rounded-lg">
                     {
-                        todos?.data?.map(item => <TodoCard {...item}></TodoCard>)
+                        todos?.data?.map(item => <TodoCard key={item.todos} {...item}></TodoCard>)
                    }
                 </div>
             {/* <div className="bg-white flex justify-center items-center p-5">
