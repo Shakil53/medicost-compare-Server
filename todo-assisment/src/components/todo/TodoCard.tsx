@@ -7,10 +7,11 @@ type TTodoCardProps = {
     title: string,
     description: string,
     isCompleted?: boolean,
+    priority: string,
 }
 
 
-const TodoCard = ({ title, description, id, isCompleted }: TTodoCardProps) => {
+const TodoCard = ({ title, description, id, isCompleted, priority }: TTodoCardProps) => {
     
     const dispatch = useAppDispatch();
 
@@ -21,9 +22,18 @@ const TodoCard = ({ title, description, id, isCompleted }: TTodoCardProps) => {
     return (
         <div className="bg-white rounded flex justify-between items-center p-2 border">
         <input onClick={toggleState} type="checkbox" name="complete" id="complete" />
-            <p>{title}</p>
-            <div>{isCompleted? <p className="text-green-500">Done</p> : <p className="text-yellow-500">Pending</p>}</div>
-            <p>{description}</p>
+            <p className="flex-1 ml-5">{title}</p>
+            <div className="flex-1 flex items-center gap-2">
+                <div className={`
+                    size-3 rounded-full
+                     ${priority == 'high' ? 'bg-red-500' : null}
+                     ${priority == 'medium' ? 'bg-yellow-500' : null}
+                     ${priority == 'low' ? 'bg-green-500' : null}
+                    `}></div>
+                <p>{priority}</p> 
+            </div>
+            <div className="flex-1">{isCompleted? <p className="text-green-500">Done</p> : <p className="text-yellow-500">Pending</p>}</div>
+            <p className="flex-[2]">{description}</p>
         <div className="space-x-5">
                 <Button onClick={()=> dispatch(removeTodo(id))} className="bg-red-500">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-4">
