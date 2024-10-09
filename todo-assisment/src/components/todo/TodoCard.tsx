@@ -41,7 +41,7 @@ const TodoCard = ({ title, description, _id, isCompleted, priority }: TTodoCardP
 
     return (
         <div className="bg-white rounded flex justify-between items-center p-2 border">
-        <input onClick={toggleState} type="checkbox" name="complete" id="complete" />
+            <input onChange={toggleState} className="mr-3" defaultChecked={isCompleted}  type="checkbox" name="complete" id="complete" />
             <p className="flex-1 ml-5">{title}</p>
             <div className="flex-1 flex items-center gap-2">
                 <div className={`

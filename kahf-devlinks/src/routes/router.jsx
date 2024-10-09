@@ -1,4 +1,5 @@
 import App from "@/App";
+import CreateLinkPage from "@/pages/createLinkPage/createLinkPage";
 import {createBrowserRouter,} from "react-router-dom";
 
 export const router = createBrowserRouter([
@@ -6,7 +7,13 @@ export const router = createBrowserRouter([
 
     {
         path: '/',
-        element: <App></App>
+        element: <App></App>,
+        children: [
+            {
+                path: '/',
+                element: <CreateLinkPage></CreateLinkPage>
+            }
+        ]
     }
 ]);
 
