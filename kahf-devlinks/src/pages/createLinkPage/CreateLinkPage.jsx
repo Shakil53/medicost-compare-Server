@@ -14,16 +14,38 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { useState } from "react";
+import CreateLinkList from "./CreateLinkList";
+import { useContext, useState } from "react";
+import { LinkContext } from "@/context/CreateLinkProvider";
+
+
 
 const CreateLinkPage = () => {
 
     const [platform, setPlatform] = useState('');
     const [link, setLink] = useState('');
+   
+    const { state, dispatch } = useContext(LinkContext)
+    console.log(state);
+
+   
+
+
+    const id = Math.random().toString(36).substring(2, 7)
+    // console.log(id); 
+    
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(platform, link);
+        
+        const createdLink = {
+            id: id,
+            platform: platform,
+            link: link,
+        }
+
+        dispatch({type: 'createLink', payload: createdLink})
+      
         
     }
     return (
@@ -75,18 +97,23 @@ const CreateLinkPage = () => {
                                     />
                                 </div>
                                 </div>
-                                <div>
+                                <div className="flex justify-end items-end">
                                     <DialogClose>
-                                        <Button type="submit">Save changes</Button>
+                                        <Button className="" type="submit">Save changes</Button>
                                     </DialogClose>
                                 </div>
                                 </form>
                                 </DialogContent>
                             </Dialog>
                     </div>
+                    <div className="mt-10 bg-gray-100 rounded p-3">
+                        <CreateLinkList></CreateLinkList>
+                    </div>
                 </div>
-                
+
             </div>
+               
+                
         </Container>
     );
 };

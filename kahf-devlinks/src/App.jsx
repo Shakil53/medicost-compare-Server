@@ -1,13 +1,14 @@
+import CreateLinkProvider from "./context/CreateLinkProvider";
 import CreateLinkPage from "./pages/createLinkPage/createLinkPage";
 import Navbar from "./shared/navbar/Navbar";
 
 
 const App = () => {
   return (
-    <div>
+    <CreateLinkProvider>
       <Navbar></Navbar>
       <CreateLinkPage></CreateLinkPage>      
-    </div>
+    </CreateLinkProvider>
   );
 };
 
