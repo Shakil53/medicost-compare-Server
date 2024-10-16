@@ -1,5 +1,4 @@
 import Container from "@/components/ui/Container";
-// import img from '../../assets/mobilemockup.jpg'
 import { Button } from "@/components/ui/button";
 import { Plus } from 'lucide-react';
 import {
@@ -17,6 +16,7 @@ import { Label } from "@/components/ui/label"
 import CreateLinkList from "./CreateLinkList";
 import { useContext, useState } from "react";
 import { LinkContext } from "@/context/CreateLinkProvider";
+import LeftSideContainer from "./LeftSideContainer";
 
 
 
@@ -25,8 +25,8 @@ const CreateLinkPage = () => {
     const [platform, setPlatform] = useState('');
     const [link, setLink] = useState('');
    
-    const { state, dispatch } = useContext(LinkContext)
-    console.log(state);
+    const { state,dispatch } = useContext(LinkContext)
+    // console.log(state);
 
    
 
@@ -53,7 +53,7 @@ const CreateLinkPage = () => {
             <div className="flex mt-5 mx-auto gap-4">
                 {/* left side container */}
                 <div className="flex-[2]">
-                    {/* <img className="h-[670px] w-[500px] mt-5" src={img}></img> */}
+                    <LeftSideContainer state={state}></LeftSideContainer>
                 </div>
                 {/* right side container */}
                 <div className="bg-white mt-5 flex-[3] p-4">
@@ -106,7 +106,7 @@ const CreateLinkPage = () => {
                                 </DialogContent>
                             </Dialog>
                     </div>
-                    <div className="mt-10 bg-gray-100 rounded p-3">
+                    <div className="mt-10 bg-gray-100 rounded">
                         <CreateLinkList></CreateLinkList>
                     </div>
                 </div>
