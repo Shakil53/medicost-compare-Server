@@ -89,36 +89,35 @@ async function run() {
         res.send(result);
       })
       // put method ----------------
-      app.put('/carts/:id', async (req, res) => {
+      app.put('/allProducts/:id', async (req, res) => {
         const id = req.params.id;
-        const updatedQuantity = req.body.quantity;
+        const { numberOfItem } = req.body;
       
         try {
           const filter = { _id: new ObjectId(id) };
           const updateDoc = {
-            $set: {
-              quantity: updatedQuantity,
-            },
+            $set: { numberOfItem },
           };
-          
+      
           const result = await cartCollection.updateOne(filter, updateDoc);
           res.send(result);
         } catch (error) {
-          res.status(500).send({ message: "Error updating cart item", error });
+          res.status(500).send({ message: 'Error updating cart item', error });
         }
       });
       // delete method -------------
-      app.delete('/carts/:id', async (req, res) => {
+      app.delete('/allProducts/:id', async (req, res) => {
         const id = req.params.id;
-      
+
         try {
           const query = { _id: new ObjectId(id) };
           const result = await cartCollection.deleteOne(query);
           res.send(result);
         } catch (error) {
-          res.status(500).send({ message: "Error deleting cart item", error });
+          res.status(500).send({ message: 'Error deleting cart item', error });
         }
       });
+
 
 
       await client.connect();
