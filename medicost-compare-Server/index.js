@@ -25,7 +25,8 @@ async function run() {
         // Connect the client to the server	(optional starting in v4.7)
         
       const cartCollection = client.db('medicost').collection("carts");
-      const doctorCollection = client.db('medicost').collection("doctors");
+      const doctorCollection = client.db('medicost').collection('doctors');
+      
 
 
       // carts collection by email
@@ -144,8 +145,110 @@ async function run() {
           res.status(500).send({ message: 'Error deleting cart item', error });
         }
       });
+      // doctor consultation collection---------
 
+      // creating a doctor list------------
+      app.post('/doctors', async (req, res) => {
+        const doctorItem = req.body;
+        const result = await doctorCollection.insertOne(doctorItem);
+        res.send(result);
+      });
 
+      //get doctor data---------
+      app.get('/doctors', async (req, res) => {
+        const searchTerm = req.query.specialty;
+        const regex = /^[a-zA-Z\s-]+$/;
+        
+        if (!regex.test(searchTerm)) {
+          return res.status(400).json({ message: 'Invalid search term.' });
+        }
+      
+        try {
+          const doctors = await doctorCollection.find({
+            specialty: { $regex: new RegExp(searchTerm, "i") }
+          }).toArray();
+          res.send(doctors);
+        } catch (error) {
+          console.error(error);
+          res.status(500).json({ message: 'Server error.' });
+        }
+      });
+
+      // get doctor suggestion ----------------
+      app.get('/doctorSuggestions', async (req, res) => {
+        const searchTerm = req.query.search;
+        const regex = /^[a-zA-Z\s-]+$/; 
+        
+        if (!regex.test(searchTerm)) {
+          return res.status(400).json({ message: 'Invalid search term.' });
+        }
+      
+        try {
+          const suggestions = await doctorCollection.find({
+            name: { $regex: new RegExp(searchTerm, "i") }
+          }).limit(5).toArray();
+          res.send(suggestions);
+        } catch (error) {
+          console.error(error);
+          res.status(500).json({ message: 'Server error.' });
+        }
+      });
+
+      // search by specialist--------- 
+      app.get('/searchSpecialist', async (req, res) => {
+        const searchTerm = req.query.search;
+        const regex = /^[a-zA-Z0-9\s-]+$/;
+    
+        if (!regex.test(searchTerm)) {
+            return res.status(400).json({ message: 'Invalid search term.' });
+        }
+    
+        try {
+            // Find specialists based on the search term matching the "specialist" field
+            const specialists = await doctorCollection.find({ specialist: { $regex: new RegExp(searchTerm, "i") } }).toArray();
+    
+            if (specialists.length === 0) {
+                return res.status(404).json({ message: 'No specialist found for this search term.' });
+            }
+    
+            res.send(specialists);
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: 'Server error.' });
+        }
+      });
+      
+      // ---------------------------------
+      
+      // Similar specialists by specialist field
+      app.get('/similarSpecialists', async (req, res) => {
+        const specialistField = req.query.field;
+        const regex = /^[a-zA-Z0-9\s&-]+$/; // Regex to allow certain characters
+    
+        if (!specialistField || !regex.test(specialistField)) {
+            return res.status(400).json({ message: 'Invalid specialist field.' });
+        }
+    
+        // Split the specialist field into individual words and create regex patterns for each
+        const words = specialistField.split(/\s*[,;&]\s*|\s+/).filter(Boolean); // Split by comma, ampersand, and whitespace
+        const regexPatterns = words.map(word => `(?=.*${word})`).join(''); // Create a lookahead regex pattern
+    
+        // Create a complete regex that matches any of the input words
+        const combinedRegex = new RegExp(regexPatterns, "i");
+    
+        try {
+            const specialists = await doctorCollection.find({ specialist: { $regex: combinedRegex } }).toArray();
+    
+            if (specialists.length === 0) {
+                return res.status(404).json({ message: 'No similar specialists found.' });
+            }
+    
+            res.send(specialists);
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: 'Server error.' });
+        }
+    });
 
       await client.connect();
       // Send a ping to confirm a successful connection
