@@ -25,6 +25,7 @@ async function run() {
         // Connect the client to the server	(optional starting in v4.7)
         
       const cartCollection = client.db('medicost').collection("carts");
+      const doctorCollection = client.db('medicost').collection("doctors");
 
 
       // carts collection by email
@@ -47,25 +48,51 @@ async function run() {
       })
       // search by generic or name
       app.get('/allPNameORGen', async (req, res) => {
-          const searchTerm = req.query.search;
-          const regex = /^[a-zA-Z0-9\s-]+$/;
-          if (!regex.test(searchTerm)) {
-              return res.status(400).json({ message: 'Invalid search term.' });
+        const searchTerm = req.query.search;
+        const regex = /^[a-zA-Z0-9\s-]+$/;
+        if (!regex.test(searchTerm)) {
+          return res.status(400).json({ message: 'Invalid search term.' });
+        }
+      
+        try {
+          const productByName = await cartCollection.findOne({ name: { $regex: new RegExp(searchTerm, "i") } });
+          
+          if (productByName) {
+            
+            const productsWithSameGeneric = await cartCollection.find({ generic: productByName.generic }).toArray();
+            return res.send(productsWithSameGeneric);
           }
       
-          try {
-              const query = {
-                  $or: [
-                      { name: { $regex: new RegExp(searchTerm, "i") } },
-                      { generic: { $regex: new RegExp(searchTerm, "i") } }
-                  ]
-              };
-              const result = await cartCollection.find(query).toArray();
-              res.send(result);
-          } catch (error) {
-              console.error(error);
-              res.status(500).json({ message: 'Server error.' });
-          }
+          const productsByGeneric = await cartCollection.find({ generic: { $regex: new RegExp(searchTerm, "i") } }).toArray();
+      
+          res.send(productsByGeneric);
+          
+        } catch (error) {
+          console.error(error);
+          res.status(500).json({ message: 'Server error.' });
+        }
+      });
+      // -------------------------------
+      // product suggestion by search
+      app.get('/productSuggestions', async (req, res) => {
+        const searchTerm = req.query.search;
+        const regex = /^[a-zA-Z0-9\s-]+$/; 
+        if (!regex.test(searchTerm)) {
+          return res.status(400).json({ message: 'Invalid search term.' });
+        }
+      
+        try {
+          const suggestions = await cartCollection.find({
+            $or: [
+              { name: { $regex: new RegExp(searchTerm, "i") } },
+              { generic: { $regex: new RegExp(searchTerm, "i") } }
+            ]
+          }).limit(5).toArray();
+          res.send(suggestions);
+        } catch (error) {
+          console.error(error);
+          res.status(500).json({ message: 'Server error.' });
+        }
       });
       // -------------------------------
 
