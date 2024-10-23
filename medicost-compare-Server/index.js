@@ -116,7 +116,14 @@ async function run() {
         const result = await cartCollection.insertOne(addItem)
         res.send(result);
       })
-      // put method ----------------
+      // doctor consultation-------
+      app.post('/carts', async (req, res) => {
+        const cartItem = req.body;
+        console.log(cartItem);
+        const result = await cartCollection.insertOne(cartItem);
+        res.send(result);
+    });
+      // put method ---------------- 
       app.put('/allProducts/:id', async (req, res) => {
         const id = req.params.id;
         const { numberOfItem } = req.body;
@@ -149,10 +156,11 @@ async function run() {
 
       // creating a doctor list------------
       app.post('/doctors', async (req, res) => {
-        const doctorItem = req.body;
+        const doctorItem = req.body; 
+        console.log("Doctor item received:", doctorItem);
         const result = await doctorCollection.insertOne(doctorItem);
         res.send(result);
-      });
+    });
 
       //get doctor data---------
       app.get('/doctors', async (req, res) => {
